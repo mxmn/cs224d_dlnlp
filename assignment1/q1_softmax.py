@@ -27,6 +27,8 @@ def softmax(x):
     elif x.ndim == 1:
         p = np.exp(x-np.max(x))
         return p / np.sum(p)
+    else:
+        raise NotImplementedError
     ### END YOUR CODE
 
     return x
@@ -62,7 +64,6 @@ def test_softmax():
     your tests be graded.
     """
     print "Running your tests..."
-
 
 if __name__ == "__main__":
     test_softmax_basic()

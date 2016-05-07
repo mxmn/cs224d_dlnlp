@@ -1,0 +1,14 @@
+* Assigment 1
+
+1. Softmax
+$$ softmax(x)_i = \frac{e^{x_i}}{\sum_{j}e^{x_j}} $$
+\[softmax(x+c)_i = \frac{e^{x_i + c}}{\sum_{j}e^{x_j+c}} =
+\frac{e^{c}e^{x_i}}{e^{c}\sum_{j}e^{x_j}} =
+\frac{e^{x_i}}{\sum_{j}e^{x_j}}\]
+
+
+
+
+* COMMENT
+#+TITLE: Assignment 1 Notes
+#+DATE:
