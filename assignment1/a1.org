@@ -11,17 +11,21 @@ Org latex export is not that great yet, and one still has to work on
 the alignment.
 
 
-** 1.a) Softmax function $\text{softmax}(x)_i = \frac{e^{x_i}}{\sum_{j}e^{x_j}}$
+** 1.a) Softmax function
 
-  \[\text{softmax}(x+c)_i = \frac{e^{x_i + c}}{\sum_{j}e^{x_j+c}} =
-  \frac{e^{c}e^{x_i}}{e^{c}\sum_{j}e^{x_j}} =
-  \frac{e^{x_i}}{\sum_{j}e^{x_j}} = \text{softmax}(x)_i\]
+   Softmax function: $\text{softmax}(x)_i = \frac{e^{x_i}}{\sum_{j}e^{x_j}}$
 
-** 2.a) Derivative of the sigmoid function $\sigma(x) = \frac{1}{1+e^{-x}}$
+   \[\text{softmax}(x+c)_i = \frac{e^{x_i + c}}{\sum_{j}e^{x_j+c}} =
+   \frac{e^{c}e^{x_i}}{e^{c}\sum_{j}e^{x_j}} =
+   \frac{e^{x_i}}{\sum_{j}e^{x_j}} = \text{softmax}(x)_i\]
 
-  $$\pp{}{x}\sigma(x) = \frac{e^{-x}}{(1+e^{-x})^2} = \frac{1}{1+e^{-x}}\, \frac{e^{-x}}{1+e^{-x}} = \frac{1}{1+e^{-x}}\, \frac{(1 + e^{-x}) -1}{1+e^{-x}} = \sigma(x)(1-\sigma(x))$$
+** 2.a) Derivative of the sigmoid function
+   Sigmoid function: $\sigma(x) = \frac{1}{1+e^{-x}}$
 
-** 2.b) Derivative of the Cross Entropy Loss $CE(\y,\hat\y) = -\sum_{i}y_{i} \log(\hat y_{i})$
+   $$\pp{}{x}\sigma(x) = \frac{e^{-x}}{(1+e^{-x})^2} = \frac{1}{1+e^{-x}}\, \frac{e^{-x}}{1+e^{-x}} = \frac{1}{1+e^{-x}}\, \frac{(1 + e^{-x}) -1}{1+e^{-x}} = \sigma(x)(1-\sigma(x))$$
+
+** 2.b) Derivative of the Cross Entropy Loss
+   Cross Entropy Loss: $CE(\y,\hat\y) = -\sum_{i}y_{i} \log(\hat y_{i})$
 
   $$\hat\y = \text{softmax}(\theta)$$
 
@@ -30,15 +34,19 @@ the alignment.
   e^{\theta_l})
   =-\pp{}{\theta_j} \sum_i y_i (\theta_i - \log\sum_l e^{\theta_l})$$
 
-  $\y$ is a $one-hot$ label vector with non-zero value at index $k$.
+  $\y$ is a /one-hot/ label vector with a non-zero value (=1) at index $k$.
 
-  If $j\not=k$: $$\pp{}{\theta_j} CE(\y,\hat\y)_j = \pp{}{\theta_j}
+  Given that $$\pp{}{\theta_j} \log\sum_l e^{\theta_l} =
+  \frac{e^\theta_j}{\sum_l e^{\theta_l}} = \hat y_j$$
+
+  if $j\not=k$: $$\pp{}{\theta_j} CE(\y,\hat\y)_j = \pp{}{\theta_j}
   \log\sum_l e^{\theta_l} = \hat y _j$$
 
-  If $j=k$:  $$\pp{}{\theta_j} CE(\y,\hat\y)_j =  \hat y_j - 1$$
+  if $j=k$:  $$\pp{}{\theta_j} CE(\y,\hat\y)_j =  \hat y_j - 1$$
 
-  given that $$\pp{}{\theta_j} \log\sum_l e^{\theta_l} =
-  \frac{e^\theta_j}{\sum_l e^{\theta_l}} = \hat y_j$$
+  Combining (vectorizing) these results:
+
+  $$\pp{}{\tHeta} CE(\y,\hat\y) = \hat\y - \y$$
 
 ** 2.c) Gradient of the one-layer network
 
@@ -53,6 +61,9 @@ the alignment.
    \times \begin{cases}
    \hat y_j& \text{if }j\not=k\\
    \hat y_j-1 & \text{if }j=k \end{cases}$$
+
+*** Alternative (more layer-systematic) derivation
+
 
 ** 2.d) Number of parameters
    Number of parameters: $(D_x+1) H + (H+1) D_y$
