@@ -1,14 +1,38 @@
+
 * Assigment 1
 
-  1.a) Softmax function $\text{softmax}(x)_i = \frac{e^{x_i}}{\sum_{j}e^{x_j}}$
+Org latex export is not that great yet, and one still has to work on
+the alignment.
+
+
+** 1.a) Softmax function $\text{softmax}(x)_i = \frac{e^{x_i}}{\sum_{j}e^{x_j}}$
 
   \[\text{softmax}(x+c)_i = \frac{e^{x_i + c}}{\sum_{j}e^{x_j+c}} =
   \frac{e^{c}e^{x_i}}{e^{c}\sum_{j}e^{x_j}} =
   \frac{e^{x_i}}{\sum_{j}e^{x_j}} = \text{softmax}(x)_i\]
 
-  2.a) Derivative of the sigmoid function $\sigma(x) = \frac{1}{1+e^{-x}}$
+** 2.a) Derivative of the sigmoid function $\sigma(x) = \frac{1}{1+e^{-x}}$
 
-  $$\pp{}{x}\sigma(x) = \frac{e^{-x}}{(1+e^{-x})^2} = \frac{1}{1+e^{-x}}\, \frac{e^{-x}}{1+e^{-x}} = \sigma(x)(1-\sigma(x))$$
+  $$\pp{}{x}\sigma(x) = \frac{e^{-x}}{(1+e^{-x})^2} = \frac{1}{1+e^{-x}}\, \frac{e^{-x}}{1+e^{-x}} = \frac{1}{1+e^{-x}}\, \frac{(1 + e^{-x}) -1}{1+e^{-x}} = \sigma(x)(1-\sigma(x))$$
+
+** 2.b) Derivative of the Cross Entropy Loss $CE(\y,\hat\y) = -\sum_{i}y_{i} \log(\hat y_{i})$
+
+  $$\hat\y = \text{softmax}(\theta)$$
+
+  $$\pp{}{\theta_j} CE(\y,\hat\y)_j = - \pp{}{\theta_j} \sum_i y_i\log
+  \hat y_i = - \pp{}{\theta_j} \sum_i y_i \log(e^{\theta_i}/\sum_l
+  e^{\theta_l})
+  =-\pp{}{\theta_j} \sum_i y_i (\theta_i - \log\sum_l e^{\theta_l})$$
+
+  $\y$ is a $one-hot$ label vector with non-zero value at index $k$.
+
+  If $j\not=k$: $$\pp{}{\theta_j} CE(\y,\hat\y)_j = \pp{}{\theta_j}
+  \log\sum_l e^{\theta_l} = \hat y _j$$
+
+  If $j=k$:  $$\pp{}{\theta_j} CE(\y,\hat\y)_j =  \hat y_j - 1$$
+
+  given that $$\pp{}{\theta_j} \log\sum_l e^{\theta_l} =
+  \frac{e^\theta_j}{\sum_l e^{\theta_l}} = \hat y_j$$
 
 
 * COMMENT
