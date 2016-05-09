@@ -1,12 +1,14 @@
 * Assigment 1
 
-1. Softmax
-$$ softmax(x)_i = \frac{e^{x_i}}{\sum_{j}e^{x_j}} $$
-\[softmax(x+c)_i = \frac{e^{x_i + c}}{\sum_{j}e^{x_j+c}} =
-\frac{e^{c}e^{x_i}}{e^{c}\sum_{j}e^{x_j}} =
-\frac{e^{x_i}}{\sum_{j}e^{x_j}}\]
+  1.a) Softmax function $\text{softmax}(x)_i = \frac{e^{x_i}}{\sum_{j}e^{x_j}}$
 
+  \[\text{softmax}(x+c)_i = \frac{e^{x_i + c}}{\sum_{j}e^{x_j+c}} =
+  \frac{e^{c}e^{x_i}}{e^{c}\sum_{j}e^{x_j}} =
+  \frac{e^{x_i}}{\sum_{j}e^{x_j}} = \text{softmax}(x)_i\]
 
+  2.a) Derivative of the sigmoid function $\sigma(x) = \frac{1}{1+e^{-x}}$
+
+  $$\pp{}{x}\sigma(x) = \frac{e^{-x}}{(1+e^{-x})^2} = \frac{1}{1+e^{-x}}\, \frac{e^{-x}}{1+e^{-x}} = \sigma(x)(1-\sigma(x))$$
 
 
 * COMMENT
