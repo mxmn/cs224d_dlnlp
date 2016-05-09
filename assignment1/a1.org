@@ -1,3 +1,9 @@
+* Definitions
+- row vectors:
+- 1 layer network:
+  - Input dimension: D_x  ($\x\in[N, D_x]$)
+  - Hidden units: $H$  ($\W_1\in [D_x, H],\ \b_1\in [H]$)
+  - Ouput dimension: D_y  ($\W_2\in [H, D_y],\ b_2\in [D_y]$)
 
 * Assigment 1
 
@@ -33,6 +39,23 @@ the alignment.
 
   given that $$\pp{}{\theta_j} \log\sum_l e^{\theta_l} =
   \frac{e^\theta_j}{\sum_l e^{\theta_l}} = \hat y_j$$
+
+** 2.c) Gradient of the one-layer network
+
+   $$\pp{J(x)}{x} = \pp{}{x} CE(\y,\hat\y) = -\pp{}{x} \sum_i y_i\log
+   (\text{softmax}(\sigma(\x\W_1+\b_1)\W_2+\b_2)) $$
+
+   With $\hat \y=\text{softmax}(\theta)$,
+   $\theta=\sigma(\h)\W_2+\b_2$ and $\h=\x\W_1+\b_1$
+
+   $$\pp{J(x)}{x} = \sum_j \pp{J}{\theta_j} \pp{\theta_j}{x} =
+   \sum_j \sigma(\h)(1-\sigma(\h))\W_1\W_{2,j}
+   \times \begin{cases}
+   \hat y_j& \text{if }j\not=k\\
+   \hat y_j-1 & \text{if }j=k \end{cases}$$
+
+** 2.d) Number of parameters
+   Number of parameters: $(D_x+1) H + (H+1) D_y$
 
 
 * COMMENT
