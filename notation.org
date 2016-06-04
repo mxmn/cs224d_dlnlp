@@ -1,16 +1,39 @@
-* cs224d Notations
+* Basic Notations
 
-Vectors: $\v\in\mathbb{R}^n$ or $\v\in\mathbb{R}^{n\times 1}$ ---  $n$ rows and 1 column.
+- Vector: $\v\in\mathbb{R}^n$ or $\v\in\mathbb{R}^{n\times 1}$ --- $n$
+  rows and 1 column.
+  - numpy: ~v.shape == (n,)~ or ~(n,1)~
+- Matrix: $\M\in\mathbb{R}^{n\times m}$ --- $n$ rows and $m$ columns.
+  - numpy: ~M.shape == (n, m)~
+*** numpy revision
+- creating a range as column vector (n rows, 1 column): ~v = np.c_[:n]~
+- creating a range as row vector (1 row, m columns): ~v = np.r_[:n]~
 
-Matrices: $\M\in\mathbb{R}^{n\times m}$ --- $n$ rows and $m$ columns.
 
-- row vectors:
+** Common Network Variable and Dimension Notations
+
+- $n$: Dimension of embeddings space
+- $V$: Vocabulary with $|V|$ words
+- $w_i$: Word $i$ from vocabulary $V$
+- $\x$: Input vectors (usually one-hot vectors)
+- $\y$: Output vectors (usually one-hot vectors, or vectors of probabilities (after softmax))
+
+
 - 1 layer network:
   - Input dimension: D_x  ($\x\in[N, D_x]$)
   - Hidden units: $H$  ($\W_1\in [D_x, H],\ \b_1\in [H]$)
   - Ouput dimension: D_y  ($\W_2\in [H, D_y],\ b_2\in [D_y]$)
 
+- Continuous Bag of Words (CBOW):
+  - $\V\in\mathbb{R}^{n\times |V|}$: Input word matrix
+  - $\U\in\mathbb{R}^{|V|\times n}$: Output word matrix
+  - $\v_i\in\mathbb{R}^{n\times 1}$: i-th column vector of $\V$, the
+    input vector representing word $w_i$
+  - $\u_i\in\mathbb{R}^{1\times n}$: i-th row vector of $\U$, the
+    output vector representing word $w_i$
+
+
 * COMMENT
-#+TITLE: Notations
+#+TITLE: cs224d Notations
 #+AUTHOR:
 #+DATE:
