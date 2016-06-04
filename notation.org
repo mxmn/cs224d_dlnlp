@@ -1,0 +1,16 @@
+* cs224d Notations
+
+Vectors: $\v\in\mathbb{R}^n$ or $\v\in\mathbb{R}^{n\times 1}$ ---  $n$ rows and 1 column.
+
+Matrices: $\M\in\mathbb{R}^{n\times m}$ --- $n$ rows and $m$ columns.
+
+- row vectors:
+- 1 layer network:
+  - Input dimension: D_x  ($\x\in[N, D_x]$)
+  - Hidden units: $H$  ($\W_1\in [D_x, H],\ \b_1\in [H]$)
+  - Ouput dimension: D_y  ($\W_2\in [H, D_y],\ b_2\in [D_y]$)
+
+* COMMENT
+#+TITLE: Notations
+#+AUTHOR:
+#+DATE:

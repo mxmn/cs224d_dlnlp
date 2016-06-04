@@ -18,3 +18,8 @@ Contains worked-out class assignments with detailed notes.
 ### [Assignment 3](assignment3/README.md)
 
 -
+
+
+### Main Notation
+
+Detailed notation is given in [notation.pdf](notation.pdf).
