@@ -10,86 +10,92 @@
 Org latex export is not that great yet, and one still has to work on
 the alignment.
 
+** 1. Softmax
+*** 1.a) Softmax function
 
-** 1.a) Softmax function
+    Softmax function: $\text{softmax}(x)_i = \frac{e^{x_i}}{\sum_{j}e^{x_j}}$
 
-   Softmax function: $\text{softmax}(x)_i = \frac{e^{x_i}}{\sum_{j}e^{x_j}}$
+    \[\text{softmax}(x+c)_i = \frac{e^{x_i + c}}{\sum_{j}e^{x_j+c}} =
+    \frac{e^{c}e^{x_i}}{e^{c}\sum_{j}e^{x_j}} =
+    \frac{e^{x_i}}{\sum_{j}e^{x_j}} = \text{softmax}(x)_i\]
 
-   \[\text{softmax}(x+c)_i = \frac{e^{x_i + c}}{\sum_{j}e^{x_j+c}} =
-   \frac{e^{c}e^{x_i}}{e^{c}\sum_{j}e^{x_j}} =
-   \frac{e^{x_i}}{\sum_{j}e^{x_j}} = \text{softmax}(x)_i\]
+** 2. Neural Network Basics
+*** 2.a) Derivative of the sigmoid function
+    Sigmoid function: $\sigma(x) = \frac{1}{1+e^{-x}}$
 
-** 2.a) Derivative of the sigmoid function
-   Sigmoid function: $\sigma(x) = \frac{1}{1+e^{-x}}$
+    $$\pp{}{x}\sigma(x) = \frac{e^{-x}}{(1+e^{-x})^2} = \frac{1}{1+e^{-x}}\, \frac{e^{-x}}{1+e^{-x}} = \frac{1}{1+e^{-x}}\, \frac{(1 + e^{-x}) -1}{1+e^{-x}} = \sigma(x)(1-\sigma(x))$$
 
-   $$\pp{}{x}\sigma(x) = \frac{e^{-x}}{(1+e^{-x})^2} = \frac{1}{1+e^{-x}}\, \frac{e^{-x}}{1+e^{-x}} = \frac{1}{1+e^{-x}}\, \frac{(1 + e^{-x}) -1}{1+e^{-x}} = \sigma(x)(1-\sigma(x))$$
+*** 2.b) Derivative of the Cross Entropy Loss
+    Cross Entropy Loss: $CE(\y,\hat\y) = -\sum_{i}y_{i} \log(\hat y_{i})$
 
-** 2.b) Derivative of the Cross Entropy Loss
-   Cross Entropy Loss: $CE(\y,\hat\y) = -\sum_{i}y_{i} \log(\hat y_{i})$
+   $$\hat\y = \text{softmax}(\theta)$$
 
-  $$\hat\y = \text{softmax}(\theta)$$
+   $$\pp{}{\theta_j} CE(\y,\hat\y)_j = - \pp{}{\theta_j} \sum_i y_i\log
+   \hat y_i = - \pp{}{\theta_j} \sum_i y_i \log(e^{\theta_i}/\sum_l
+   e^{\theta_l})
+   =-\pp{}{\theta_j} \sum_i y_i (\theta_i - \log\sum_l e^{\theta_l})$$
 
-  $$\pp{}{\theta_j} CE(\y,\hat\y)_j = - \pp{}{\theta_j} \sum_i y_i\log
-  \hat y_i = - \pp{}{\theta_j} \sum_i y_i \log(e^{\theta_i}/\sum_l
-  e^{\theta_l})
-  =-\pp{}{\theta_j} \sum_i y_i (\theta_i - \log\sum_l e^{\theta_l})$$
+   $\y$ is a /one-hot/ label vector with a non-zero value (=1) at index $k$.
 
-  $\y$ is a /one-hot/ label vector with a non-zero value (=1) at index $k$.
+   Given that $$\pp{}{\theta_j} \log\sum_l e^{\theta_l} =
+   \frac{e^\theta_j}{\sum_l e^{\theta_l}} = \hat y_j$$
 
-  Given that $$\pp{}{\theta_j} \log\sum_l e^{\theta_l} =
-  \frac{e^\theta_j}{\sum_l e^{\theta_l}} = \hat y_j$$
+   if $j\not=k$: $$\pp{}{\theta_j} CE(\y,\hat\y)_j = \pp{}{\theta_j}
+   \log\sum_l e^{\theta_l} = \hat y _j$$
 
-  if $j\not=k$: $$\pp{}{\theta_j} CE(\y,\hat\y)_j = \pp{}{\theta_j}
-  \log\sum_l e^{\theta_l} = \hat y _j$$
+   if $j=k$:  $$\pp{}{\theta_j} CE(\y,\hat\y)_j =  \hat y_j - 1$$
 
-  if $j=k$:  $$\pp{}{\theta_j} CE(\y,\hat\y)_j =  \hat y_j - 1$$
+   Combining (vectorizing) these results:
 
-  Combining (vectorizing) these results:
+   $$\pp{}{\tHeta} CE(\y,\hat\y) = \hat\y - \y$$
 
-  $$\pp{}{\tHeta} CE(\y,\hat\y) = \hat\y - \y$$
+*** 2.c) Gradient of the one-layer network
 
-** 2.c) Gradient of the one-layer network
-
-   $$\pp{J(x)}{x} = \pp{}{x} CE(\y,\hat\y) = -\pp{}{x} \sum_i y_i\log
-   (\text{softmax}(\sigma(\x\W_1+\b_1)\W_2+\b_2)) $$
-
-   With $\hat \y=\text{softmax}(\theta)$,
-   $\theta=\sigma(\h)\W_2+\b_2$ and $\h=\x\W_1+\b_1$
-
-   $$\pp{J(x)}{x} = \sum_j \pp{J}{\theta_j} \pp{\theta_j}{x} =
-   \sum_j \sigma(\h)(1-\sigma(\h))\W_1\W_{2,j}
-   \times \begin{cases}
-   \hat y_j& \text{if }j\not=k\\
-   \hat y_j-1 & \text{if }j=k \end{cases}$$
-
-*** Alternative (more layer-systematic) derivation
-  - Forward pass:
-    $$ J(x) = CE(\y,\hat\y) = - \sum_i y_i\log
+    $$\pp{J(x)}{x} = \pp{}{x} CE(\y,\hat\y) = -\pp{}{x} \sum_i y_i\log
     (\text{softmax}(\sigma(\x\W_1+\b_1)\W_2+\b_2)) $$
 
-    - Input: $\x$
-    - L1 affine transformation: $\z_1=\x\W_1+\b_1$
-    - L1 activation: $\h = \sigma(\z_1)$
-    - L2 affine transformation: $\z_2=\h\W_2+\b_2$
-    - Scores computation: $\hat\y = \text{softmax}(\z_2)$
-    - Cross-Entropy Loss: $CE = \sum_i \y \log\hat\y$
-  - Backward pass (gradient derivation):
-    $$\pp{J}{x} = \pp{J}{\hat\y} \pp{\hat\y}{\z_2} \pp{\z_2}{\h}
-    \pp{\h}{\z_1} \pp{\z_1}{x} =
-    \pp{J}{x} = (\hat\y - \y) \W_2^T \sigma(\z_1)(1-\sigma(z_1)) \W_1^T$$
-    - $dz_2 = \pp{J}{\z_2} = \hat\y-\y$
-    - $dh_1 = \pp{J}{\h} = dz_2 \pp{\z_2}{\h} = dz_2 \W_2^T$
-    - $dz_1 = \pp{J}{\z_1} = dh_1 \pp{\h}{\z_1} = dh_1 \circ \pp{\sigma(\z_1)}{\z_1}$
-    - $dx = \pp{J}{\x} = dz_1 \pp{\z_1}{\x} = dz_1 \W_1^T$
-  - Other gradients:
-    - dW2 = $\pp{J}{W_2} = \pp{J}{z_2}\pp{z_2}{\W_2} = \h^T dz_2$
-    - db2 = $\pp{J}{b_2} = \pp{J}{z_2}\pp{z_2}{\b_2} = dz_2$ (summed over the first dimension)
-    - dW1 = $\pp{J}{W_1} = \pp{J}{z_1}\pp{z_1}{\W_1} = \x^T dz_1$
-    - db1 = $\pp{J}{b_1} = \pp{J}{z_1}\pp{z_1}{\b_1} = dz_1$  (summed over the first dimension)
+    With $\hat \y=\text{softmax}(\theta)$,
+    $\theta=\sigma(\h)\W_2+\b_2$ and $\h=\x\W_1+\b_1$
 
-** 2.d) Number of parameters
-   Number of parameters: $(D_x+1) H + (H+1) D_y$
+    $$\pp{J(x)}{x} = \sum_j \pp{J}{\theta_j} \pp{\theta_j}{x} =
+    \sum_j \sigma(\h)(1-\sigma(\h))\W_1\W_{2,j}
+    \times \begin{cases}
+    \hat y_j& \text{if }j\not=k\\
+    \hat y_j-1 & \text{if }j=k \end{cases}$$
 
+**** Alternative (more layer-systematic) derivation
+   - Forward pass:
+     $$ J(x) = CE(\y,\hat\y) = - \sum_i y_i\log
+     (\text{softmax}(\sigma(\x\W_1+\b_1)\W_2+\b_2)) $$
+
+     - Input: $\x$
+     - L1 affine transformation: $\z_1=\x\W_1+\b_1$
+     - L1 activation: $\h = \sigma(\z_1)$
+     - L2 affine transformation: $\z_2=\h\W_2+\b_2$
+     - Scores computation: $\hat\y = \text{softmax}(\z_2)$
+     - Cross-Entropy Loss: $CE = \sum_i \y \log\hat\y$
+   - Backward pass (gradient derivation):
+     $$\pp{J}{x} = \pp{J}{\hat\y} \pp{\hat\y}{\z_2} \pp{\z_2}{\h}
+     \pp{\h}{\z_1} \pp{\z_1}{x} =
+     \pp{J}{x} = (\hat\y - \y) \W_2^T \sigma(\z_1)(1-\sigma(z_1)) \W_1^T$$
+     - $dz_2 = \pp{J}{\z_2} = \hat\y-\y$
+     - $dh_1 = \pp{J}{\h} = dz_2 \pp{\z_2}{\h} = dz_2 \W_2^T$
+     - $dz_1 = \pp{J}{\z_1} = dh_1 \pp{\h}{\z_1} = dh_1 \circ \pp{\sigma(\z_1)}{\z_1}$
+     - $dx = \pp{J}{\x} = dz_1 \pp{\z_1}{\x} = dz_1 \W_1^T$
+   - Other gradients:
+     - dW2 = $\pp{J}{W_2} = \pp{J}{z_2}\pp{z_2}{\W_2} = \h^T dz_2$
+     - db2 = $\pp{J}{b_2} = \pp{J}{z_2}\pp{z_2}{\b_2} = dz_2$ (summed over the first dimension)
+     - dW1 = $\pp{J}{W_1} = \pp{J}{z_1}\pp{z_1}{\W_1} = \x^T dz_1$
+     - db1 = $\pp{J}{b_1} = \pp{J}{z_1}\pp{z_1}{\b_1} = dz_1$  (summed over the first dimension)
+
+*** 2.d) Number of parameters
+    Number of parameters: $(D_x+1) H + (H+1) D_y$
+
+** 3. word2vec
+*** 3.a) Derivative of the skipgram 1
+
+*** 3.b) Derivative of the skipgram 2
+*** 3.c) Derivative of the skipgram 3
 
 * COMMENT
 #+TITLE: Assignment 1 Notes

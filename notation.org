@@ -2,13 +2,7 @@
 
 - Vector: $\v\in\mathbb{R}^n$ or $\v\in\mathbb{R}^{n\times 1}$ --- $n$
   rows and 1 column.
-  - numpy: ~v.shape == (n,)~ or ~(n,1)~
 - Matrix: $\M\in\mathbb{R}^{n\times m}$ --- $n$ rows and $m$ columns.
-  - numpy: ~M.shape == (n, m)~
-*** numpy revision
-- creating a range as column vector (n rows, 1 column): ~v = np.c_[:n]~
-- creating a range as row vector (1 row, m columns): ~v = np.r_[:n]~
-
 
 ** Common Network Variable and Dimension Notations
 
@@ -27,10 +21,25 @@
 - Continuous Bag of Words (CBOW):
   - $\V\in\mathbb{R}^{n\times |V|}$: Input word matrix
   - $\U\in\mathbb{R}^{|V|\times n}$: Output word matrix
-  - $\v_i\in\mathbb{R}^{n\times 1}$: i-th column vector of $\V$, the
-    input vector representing word $w_i$
-  - $\u_i\in\mathbb{R}^{1\times n}$: i-th row vector of $\U$, the
-    output vector representing word $w_i$
+  - $\v_i\in\mathbb{R}^{n\times 1}$: i-th column of $\V$, the input
+    vector representing word $w_i$
+  - $\u_i\in\mathbb{R}^{n\times 1}$: i-th row of $\U$, the output
+    vector representing word $w_i$
+
+
+* Useful Math Relationships
+
+
+* NumPy
+- Vector $\v\in\mathbb{R}^n$ or $\v\in\mathbb{R}^{n\times 1}$ with $n$
+  rows and 1 column: ~v.shape == (n,)~ or ~(n,1)~
+- Matrix $\M\in\mathbb{R}^{n\times m}$ with $n$ rows and $m$ columns:
+  ~M.shape == (n, m)~
+
+*** numpy revision
+- column vectors (n rows, 1 column): ~v = np.c_[:n]~; ~v = np.c_(x)~
+- row vectors (1 row, m columns): ~v = np.r_[:n]~
+
 
 
 * COMMENT
