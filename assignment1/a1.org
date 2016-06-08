@@ -92,9 +92,33 @@ the alignment.
     Number of parameters: $(D_x+1) H + (H+1) D_y$
 
 ** 3. word2vec
-*** 3.a) Derivative of the skipgram 1
+*** 3.a) Derivative of the skipgram 1 --- with respect to $\v_c$
+- Skipgram: given a center word $c$ ($v_c\in\mathbb{R}^{n},
+  \v_c=\V\c$, $\c\in\mathbb{R}^{|V|}$ is one-hot-vector of word $c$),
+  predict the surrounding context words ($2m$ words).
 
-*** 3.b) Derivative of the skipgram 2
+  Word prediction softmax function: $$\hat\y_o = p(\o|c) =
+  \frac{\exp(\u_o^T \v_c)}{\sum_w \exp(\u_w^T \v_c)}$$ where $\o$ is
+  the expected output word, and $\u_w\in\mathbb{R}^n$ ($w\in[1, W]$)
+  are the output word vectors.
+
+  $$J_{softmax-CE}(\o, \v_c,\U) = CE(\y,\hat\y) = -\sum_i \y \log
+  \hat\y= -\u_o^T\v_c + \log\left(\sum_w \exp(\u_w^T\v_c)\right) =
+  = -\u_o^T\v_c + \log\left(\sum [\exp(\U\v_c)]\right) $$
+
+  where $\U\in\mathbb{R}^{|V|\times n}$ is the output word matrix
+  ($n$: dimension of embedding space; $|V|$: dimension of vocabulary).
+
+  $$\pp{}{\v_c}CE(\y,\hat\y) = -\u_o^T + \sum_i \u_i^T
+  \frac{\exp(\u_i^T\v_c)} {\sum_w\exp(\u_w^T\v_c)} = -\u_o^T + \sum_i \u_i^T \hat y_i
+  = (\hat\y -\y)^T\U $$
+since $\u_o = \U^T\y,\ \sum_i \u_i^T \hat y_i = \hat\y^T\U$, where $\y$ is the
+one-hot-vector with 1 at $o$ and 0 elsewhere.
+
+*** 3.b) Derivative of the skipgram 2 --- with respect to $\u_w$
+
+
+
 *** 3.c) Derivative of the skipgram 3
 
 * COMMENT
