@@ -93,7 +93,7 @@ the alignment.
 
 ** 3. word2vec
 *** 3.a) Derivative of the skipgram 1 --- with respect to $\v_c$
-- Skipgram: given a center word $c$ ($v_c\in\mathbb{R}^{n},
+  Skipgram: given a center word $c$ ($v_c\in\mathbb{R}^{n},
   \v_c=\V\c$, $\c\in\mathbb{R}^{|V|}$ is one-hot-vector of word $c$),
   predict the surrounding context words ($2m$ words).
 
@@ -112,14 +112,27 @@ the alignment.
   $$\pp{}{\v_c}CE(\y,\hat\y) = -\u_o^T + \sum_i \u_i^T
   \frac{\exp(\u_i^T\v_c)} {\sum_w\exp(\u_w^T\v_c)} = -\u_o^T + \sum_i \u_i^T \hat y_i
   = (\hat\y -\y)^T\U $$
-since $\u_o = \U^T\y,\ \sum_i \u_i^T \hat y_i = \hat\y^T\U$, where $\y$ is the
-one-hot-vector with 1 at $o$ and 0 elsewhere.
+
+  since $\u_o = \U^T\y,\ \sum_i \u_i^T \hat y_i = \hat\y^T\U$, where
+  $\y$ is the one-hot-vector with 1 at $o$ and 0 elsewhere.
 
 *** 3.b) Derivative of the skipgram 2 --- with respect to $\u_w$
+    $$\pp{}{\U}CE(\y,\hat\y) == \pp{}{\u_i}CE(\y,\hat\y) =
+    \hat y_i\v_c + \begin{cases}-\v_c & \u_i=\u_o \\ 0 & \u_i\not=\u_o \end{cases}$$
+    $$\pp{}{\U}CE(\y,\hat\y) = (\hat\y-\y) \v_c^T $$
 
 
+*** 3.c) Derivative of the skipgram 3 --- negative sampling loss
+Using the negative sampling loss for the predicted vector $v_c$; $K$
+negative samples (words) are drawn. $\o$ is the expected output vector
+with $o\not\in \{1, .., K\}$. Again, for a given word $\o$, the output
+vector is $\u_o$.
 
-*** 3.c) Derivative of the skipgram 3
+The negative sampling loss function is
+$$ J_{neg-sample}(\o,\v_c, \U) = -\log(\sigma(\u_o^T \v_c)) - \sum_{k=1}^K \log(\sigma(-\u_k^T \v_c))$$
+
+/Solution/:
+
 
 * COMMENT
 #+TITLE: Assignment 1 Notes
