@@ -133,6 +133,10 @@ $$ J_{neg-sample}(\o,\v_c, \U) = -\log(\sigma(\u_o^T \v_c)) - \sum_{k=1}^K \log(
 
 /Solution/:
 
+$$\pp{}{\v_c}J_{neg-sample} = $$
+
+$$\pp{}{\U}J_{neg-sample} = $$
+
 
 * COMMENT
 #+TITLE: Assignment 1 Notes
